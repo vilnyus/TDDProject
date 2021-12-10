@@ -7,10 +7,8 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterTest;
@@ -22,20 +20,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 public class BaseTest {
-    private AppiumDriver driver;
-    public static AppiumDriverLocalService service;
-    private Properties properties;
+    protected static AppiumDriver driver;
+    protected static AppiumDriverLocalService service;
+    protected static Properties properties;
     InputStream inputStream;
 
     public BaseTest() {
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-    }
 
-    @BeforeClass
-    public void startAppiumServer() {
         AppiumServiceBuilder builder = new AppiumServiceBuilder();
 
         builder.usingAnyFreePort();
@@ -44,6 +38,18 @@ public class BaseTest {
 
         service = AppiumDriverLocalService.buildService(builder);
         service.start();
+    }
+
+    @BeforeClass
+    public void startAppiumServer() {
+//        AppiumServiceBuilder builder = new AppiumServiceBuilder();
+//
+//        builder.usingAnyFreePort();
+//        builder.usingDriverExecutable(new File("C:\\Program Files\\nodejs\\node.exe"));
+//        builder.withAppiumJS(new File("C:\\Users\\vagha\\AppData\\Roaming\\npm\\node_modules\\appium"));
+//
+//        service = AppiumDriverLocalService.buildService(builder);
+//        service.start();
     }
 
     @Parameters({"platformName", "platformVersion", "deviceName"})
@@ -63,7 +69,7 @@ public class BaseTest {
             capabilities.setCapability("appActivity", properties.getProperty("androidAppActivity"));
             capabilities.setCapability("automationName", properties.getProperty("androidAutomationName"));
             String androidAppUrl = System.getProperty("user.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "app" + File.separator + "SauceLabs.apk";
-//        capabilities.setCapability("app", androidAppUrl);
+            capabilities.setCapability("app", androidAppUrl);
             driver = new AndroidDriver(service.getUrl(), capabilities);
         } catch (Exception e){
             e.printStackTrace();
@@ -77,7 +83,7 @@ public class BaseTest {
         wait.until(ExpectedConditions.invisibilityOf(e));
     }
 
-    public void clickElement(MobileElement e) {
+    public void click(MobileElement e) {
         waitForVisibility(e);
         e.click();
     }
@@ -87,11 +93,10 @@ public class BaseTest {
         e.sendKeys(textStr);
     }
 
-    public String getAttribute(MobileElement e, String attributeStr) {
+    public String getAttribute(MobileElement e, String attribute) {
         waitForVisibility(e);
-        return e.getAttribute(attributeStr);
+        return e.getAttribute(attribute);
     }
-
 
     @AfterTest
     public void afterTest() {

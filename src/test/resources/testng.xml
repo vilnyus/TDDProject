@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "https://github.com/vilnyus">
 <suite name="TDD Project" paralele = "false">
     <test name="Test 1">
         <parameter name="platformName" value="Android"/>
         <parameter name="platformVersion" value="9.0"/>
         <parameter name="deviceName" value="emulator-5554"/>
         <classes>
-            <class name="com.qa"/>
-        </classes>
-    </test> <!-- Test -->
-    <test name="Test 2">
-        <parameter name="platformName" value="Android"/>
-        <parameter name="platformVersion" value="11.0"/>
-        <parameter name="deviceName" value="emulator-5554"/>
-        <classes>
-            <class name="com.qa"/>
+            <class name="com.qa.tests.LoginTests"/>
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->
