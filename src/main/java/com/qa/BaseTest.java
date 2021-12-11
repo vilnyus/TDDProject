@@ -29,15 +29,6 @@ public class BaseTest {
 
     public BaseTest() {
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-
-        AppiumServiceBuilder builder = new AppiumServiceBuilder();
-
-        builder.usingAnyFreePort();
-        builder.usingDriverExecutable(new File("C:\\Program Files\\nodejs\\node.exe"));
-        builder.withAppiumJS(new File("C:\\Users\\vagha\\AppData\\Roaming\\npm\\node_modules\\appium"));
-
-        service = AppiumDriverLocalService.buildService(builder);
-        service.start();
     }
 
     @BeforeClass
@@ -55,6 +46,15 @@ public class BaseTest {
     @Parameters({"platformName", "platformVersion", "deviceName"})
     @BeforeTest
     public void beforeTest(String platformName, String platformVersion, String deviceName) throws IOException {
+        AppiumServiceBuilder builder = new AppiumServiceBuilder();
+
+        builder.usingAnyFreePort();
+        builder.usingDriverExecutable(new File("C:\\Program Files\\nodejs\\node.exe"));
+        builder.withAppiumJS(new File("C:\\Users\\vagha\\AppData\\Roaming\\npm\\node_modules\\appium"));
+
+        service = AppiumDriverLocalService.buildService(builder);
+        service.start();
+
         try {
             properties = new Properties();
             String propertiesFileName = "config.properties";
@@ -69,7 +69,7 @@ public class BaseTest {
             capabilities.setCapability("appActivity", properties.getProperty("androidAppActivity"));
             capabilities.setCapability("automationName", properties.getProperty("androidAutomationName"));
             String androidAppUrl = System.getProperty("user.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "app" + File.separator + "SauceLabs.apk";
-            capabilities.setCapability("app", androidAppUrl);
+//            capabilities.setCapability("app", androidAppUrl);
             driver = new AndroidDriver(service.getUrl(), capabilities);
         } catch (Exception e){
             e.printStackTrace();
@@ -80,7 +80,7 @@ public class BaseTest {
 
     public void waitForVisibility(MobileElement e) {
         WebDriverWait wait = new WebDriverWait(driver, TestUtils.WAIT);
-        wait.until(ExpectedConditions.invisibilityOf(e));
+        wait.until(ExpectedConditions.visibilityOf(e));
     }
 
     public void click(MobileElement e) {
