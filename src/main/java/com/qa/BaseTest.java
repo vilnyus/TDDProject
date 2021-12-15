@@ -12,7 +12,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 
@@ -31,7 +30,6 @@ public class BaseTest {
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 
-//    @BeforeClass
     public void startAppiumServer() {
         AppiumServiceBuilder builder = new AppiumServiceBuilder();
 
@@ -43,9 +41,12 @@ public class BaseTest {
         service.start();
     }
 
+    //Getting parameters from testng.xml
     @Parameters({"platformName", "platformVersion", "deviceName"})
     @BeforeTest
     public void beforeTest(String platformName, String platformVersion, String deviceName) throws IOException {
+
+        //Running service
         startAppiumServer();
 
         try {
@@ -55,16 +56,22 @@ public class BaseTest {
             properties.load(inputStream);
 
             DesiredCapabilities capabilities = new DesiredCapabilities();
+            //Device specific parameters
             capabilities.setCapability("platformName", platformName);
             capabilities.setCapability("platformVersion", platformVersion);
             capabilities.setCapability("deviceName", deviceName);
+
+            //Application specific parameters
             capabilities.setCapability("appPackage", properties.getProperty("androidAppPackage"));
             capabilities.setCapability("appActivity", properties.getProperty("androidAppActivity"));
             capabilities.setCapability("automationName", properties.getProperty("androidAutomationName"));
-            String androidAppUrl = System.getProperty("user.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "app" + File.separator + "SauceLabs.apk";
-//            capabilities.setCapability("app", androidAppUrl);
-//            String urlApp = service.getUrl().toString();
+
+            //SauceLabs.apk application location from files
+            String androidAppLocation = System.getProperty("user.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "app" + File.separator + "SauceLabs.apk";
+            capabilities.setCapability("app", androidAppLocation);
+
             driver = new AndroidDriver(service.getUrl(), capabilities);
+
         } catch (Exception e){
             e.printStackTrace();
             throw e;
@@ -72,29 +79,33 @@ public class BaseTest {
 
     }
 
+    //Mobile visibility check function
     public void waitForVisibility(MobileElement e) {
         WebDriverWait wait = new WebDriverWait(driver, TestUtils.WAIT);
         wait.until(ExpectedConditions.visibilityOf(e));
     }
 
+    //Click on button element
     public void click(MobileElement e) {
         waitForVisibility(e);
         e.click();
     }
 
+    //Send text to mobile element
     public void sendKeys(MobileElement e, String textStr) {
         waitForVisibility(e);
         e.sendKeys(textStr);
     }
 
+    //Get mobile element text attribute
     public String getAttribute(MobileElement e, String attribute) {
         waitForVisibility(e);
         return e.getAttribute(attribute);
     }
 
+    //After test quit driver
     @AfterTest
     public void afterTest() {
         driver.quit();
-
     }
 }
