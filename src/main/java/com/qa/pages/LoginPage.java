@@ -5,9 +5,9 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 
 public class LoginPage extends BaseTest {
-    @AndroidFindBy (xpath = "//android.widget.EditText[@content-desc=\"test-Username\"]") private MobileElement usernameTxtField;
-    @AndroidFindBy (xpath = "//android.widget.EditText[@content-desc=\"test-Password\"]") private MobileElement passwordTxtField;
-    @AndroidFindBy (xpath = "//android.view.ViewGroup[@content-desc=\"test-LOGIN\"]/android.widget.TextView") private MobileElement loginButton;
+    @AndroidFindBy (accessibility = "test-Username") private MobileElement usernameTxtField;
+    @AndroidFindBy (accessibility = "test-Password") private MobileElement passwordTxtField;
+    @AndroidFindBy (accessibility = "test-LOGIN") private MobileElement loginButton;
     @AndroidFindBy (xpath = "//android.view.ViewGroup[@content-desc=\"test-Error message\"]/android.widget.TextView") private MobileElement errorText;
 
 
@@ -17,7 +17,7 @@ public class LoginPage extends BaseTest {
     }
 
     public LoginPage enterPassword(String password) {
-        sendKeys(usernameTxtField, password);
+        sendKeys(passwordTxtField, password);
         return this;
     }
 

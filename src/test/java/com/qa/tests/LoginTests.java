@@ -26,7 +26,7 @@ public class LoginTests extends BaseTest {
     @BeforeMethod
     public void beforeMethod(Method m) {
         loginPage = new LoginPage();
-        System.out.println("\n" + "******** starting method " + m.getName() + "********");
+        System.out.println("\n" + "******** ******** ******** starting method " + m.getName() + "******** ******** ********");
     }
 
 //    @AfterMethod
@@ -36,7 +36,7 @@ public class LoginTests extends BaseTest {
 
     @Test
     public void invalidUsernameTest() {
-        loginPage.enterUsername("invalidUserbame");
+        loginPage.enterUsername("invalidUsername");
         loginPage.enterPassword("secret_sauce");
         loginPage.pressLoginButton();
         String actualErrText = loginPage.getErrorText();

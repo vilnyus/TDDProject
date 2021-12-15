@@ -31,21 +31,8 @@ public class BaseTest {
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 
-    @BeforeClass
+//    @BeforeClass
     public void startAppiumServer() {
-//        AppiumServiceBuilder builder = new AppiumServiceBuilder();
-//
-//        builder.usingAnyFreePort();
-//        builder.usingDriverExecutable(new File("C:\\Program Files\\nodejs\\node.exe"));
-//        builder.withAppiumJS(new File("C:\\Users\\vagha\\AppData\\Roaming\\npm\\node_modules\\appium"));
-//
-//        service = AppiumDriverLocalService.buildService(builder);
-//        service.start();
-    }
-
-    @Parameters({"platformName", "platformVersion", "deviceName"})
-    @BeforeTest
-    public void beforeTest(String platformName, String platformVersion, String deviceName) throws IOException {
         AppiumServiceBuilder builder = new AppiumServiceBuilder();
 
         builder.usingAnyFreePort();
@@ -54,6 +41,12 @@ public class BaseTest {
 
         service = AppiumDriverLocalService.buildService(builder);
         service.start();
+    }
+
+    @Parameters({"platformName", "platformVersion", "deviceName"})
+    @BeforeTest
+    public void beforeTest(String platformName, String platformVersion, String deviceName) throws IOException {
+        startAppiumServer();
 
         try {
             properties = new Properties();
@@ -70,6 +63,7 @@ public class BaseTest {
             capabilities.setCapability("automationName", properties.getProperty("androidAutomationName"));
             String androidAppUrl = System.getProperty("user.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "app" + File.separator + "SauceLabs.apk";
 //            capabilities.setCapability("app", androidAppUrl);
+//            String urlApp = service.getUrl().toString();
             driver = new AndroidDriver(service.getUrl(), capabilities);
         } catch (Exception e){
             e.printStackTrace();
